@@ -13,7 +13,7 @@ pipeline {
 
         stage('Run Unit Tests') {
             steps {
-                bat 'venv\\Scripts\\activate && pytest tests/'
+                bat 'venv\\Scripts\\activate && pytest'
             }
         }
 
