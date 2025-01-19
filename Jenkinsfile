@@ -13,13 +13,19 @@ pipeline {
 
         stage('Run Unit Tests') {
             steps {
-                bat 'venv\\Scripts\\activate && pytest'
+                bat 'pytest'
             }
         }
 
         stage('Start Flask App with Waitress') {
             steps {
                 bat 'venv\\Scripts\\activate && waitress-serve --host=127.0.0.1 --port=8000 app:app'
+            }
+        }
+
+        stage("post-deployment check"){
+            steps{
+                vbat 'curl http://127.0.0.1:8000'
             }
         }
 
