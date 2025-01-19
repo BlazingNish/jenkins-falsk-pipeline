@@ -19,19 +19,24 @@ pipeline {
 
         stage('Start Flask App with Waitress') {
             steps {
-                bat 'venv\\Scripts\\activate && waitress-serve --host=127.0.0.1 --port=8000 app:app'
+                bat 'venv\\Scripts\\activate && start /B waitress-serve --host=127.0.0.1 --port=8000 app:app'
+                sleep 5
             }
         }
 
-        stage("post-deployment check"){
-            steps{
-                vbat 'curl http://127.0.0.1:8000'
+        stage('Verify Server is Running') {
+            steps {
+                bat 'curl -I http://127.0.0.1:8000' 
             }
         }
 
     }
 
     post {
+        always {
+            echo 'Stopping Waitress Server...'
+            bat 'taskkill /F /IM python.exe'
+        }
         success {
             echo 'Deployment Successful! 🎉'
         }
